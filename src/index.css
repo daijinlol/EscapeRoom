@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+/* Tvé vlastní styly, pokud nějaké máš */
+body {
+    background-color: #050a10;
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
