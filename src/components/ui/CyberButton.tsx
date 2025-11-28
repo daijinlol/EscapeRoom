@@ -18,24 +18,25 @@ export const CyberButton: React.FC<CyberButtonProps> = ({
                                                             className = ''
                                                         }) => {
 
-    // Použití hooku z našeho nového kontextu
     const { play } = useSound();
 
-    const baseStyle = "relative group w-full px-6 py-4 mb-4 font-mono font-bold tracking-widest uppercase transition-all duration-200 border-2 clip-path-polygon cursor-pointer flex items-center justify-between";
+    // Přidáno overflow-hidden, aby posuvné pozadí nevyčuhovalo
+    const baseStyle = "relative group w-full px-6 py-4 mb-4 font-mono font-bold tracking-widest uppercase border-2 clip-path-polygon cursor-pointer flex items-center justify-between overflow-hidden transition-all duration-200";
 
     const variants = {
-        primary: "bg-cyan-950/50 border-cyan-400 text-cyan-400 hover:bg-cyan-400 hover:text-black hover:shadow-[0_0_20px_rgba(34,211,238,0.6)]",
+        // Odebráno hover:text-black z kontejneru, budeme to řešit na elementech uvnitř pro lepší kontrolu
+        primary: "bg-cyan-950/50 border-cyan-400 text-cyan-400 hover:shadow-[0_0_20px_rgba(34,211,238,0.6)]",
         secondary: "bg-slate-900/50 border-slate-600 text-slate-400 hover:border-slate-300 hover:text-white",
         danger: "bg-red-950/30 border-red-500 text-red-500 hover:bg-red-500 hover:text-black hover:shadow-[0_0_20px_rgba(239,68,68,0.6)]",
     };
 
     const handleClick = () => {
-        play('click'); // Zvuk kliknutí
+        play('click');
         onClick();
     };
 
     const handleMouseEnter = () => {
-        play('hover'); // Zvuk při najetí myší
+        play('hover');
     };
 
     return (
@@ -44,11 +45,22 @@ export const CyberButton: React.FC<CyberButtonProps> = ({
             onMouseEnter={handleMouseEnter}
             className={`${baseStyle} ${variants[variant]} ${className}`}
         >
-            <span className="flex items-center gap-3">
+            {/* 1. Pozadí pro hover efekt (Slide in) */}
+            {variant === 'primary' && (
+                <div className="absolute inset-0 bg-cyan-400 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-out z-0" />
+            )}
+
+            {/* 2. Obsah tlačítka - Text */}
+            <span className={`flex items-center gap-3 relative z-10 transition-colors duration-300 ${variant === 'primary' ? 'group-hover:text-black' : ''}`}>
                 {Icon && <Icon size={20} />}
                 {children}
             </span>
-            <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1" />
+
+            {/* 3. Šipka */}
+            <ChevronRight
+                size={18}
+                className={`opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1 relative z-10 ${variant === 'primary' ? 'group-hover:text-black' : ''}`}
+            />
         </button>
     );
 };

@@ -1,10 +1,7 @@
 import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
+import type { SoundType } from '../types';
 
-// Typy zvuků
-export type SoundType =
-    | 'click' | 'hover' | 'success' | 'error'
-    | 'typing' | 'glitch' | 'menu_open' | 'toggle_on' | 'toggle_off';
-
+// Rozhraní pro kontext
 interface SoundContextType {
     soundEnabled: boolean;
     volume: number;
@@ -13,10 +10,13 @@ interface SoundContextType {
     play: (type: SoundType) => void;
 }
 
-const SoundContext = createContext<SoundContextType | undefined>(undefined);
+// 1. Vytvoření kontextu
+// eslint-disable-next-line react-refresh/only-export-components
+export const SoundContext = createContext<SoundContextType | undefined>(undefined);
 
-// Singleton AudioContext
-const AudioContextClass = (window.AudioContext || (window as any).webkitAudioContext);
+// 2. Singleton AudioContext (mimo komponentu, aby přežil re-rendery)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
 let sharedAudioCtx: AudioContext | null = null;
 
 const getAudioContext = () => {
@@ -26,10 +26,12 @@ const getAudioContext = () => {
     return sharedAudioCtx;
 };
 
+// 3. Provider Komponenta
 export const SoundProvider: React.FC<{
     children: React.ReactNode;
     initialEnabled: boolean;
     initialVolume?: number;
+    // Callback, kterým SoundProvider informuje svět o změně (např. pro uložení do localStorage)
     onSettingsChange?: (enabled: boolean, volume: number) => void;
 }> = ({ children, initialEnabled, initialVolume = 0.5, onSettingsChange }) => {
 
@@ -37,24 +39,35 @@ export const SoundProvider: React.FC<{
     const [volume, setVolumeState] = useState(initialVolume);
     const ctxRef = useRef<AudioContext | null>(null);
 
-    // Synchronizace s rodičem (App.tsx), pokud se změní nastavení zde
-    const updateSettings = (en: boolean, vol: number) => {
-        setSoundEnabledState(en);
-        setVolumeState(vol);
-        if (onSettingsChange) onSettingsChange(en, vol);
-    };
-
-    const setSoundEnabled = (val: boolean) => updateSettings(val, volume);
-    const setVolume = (val: number) => updateSettings(soundEnabled, val);
-
-    // Inicializace AudioContextu
+    // Inicializace Audio Contextu
     useEffect(() => {
         if (!ctxRef.current) {
             ctxRef.current = getAudioContext();
         }
     }, []);
 
-    // --- GENERÁTOR ZVUKŮ ---
+    // Reakce na změnu props (např. při startu aplikace)
+    useEffect(() => {
+        setSoundEnabledState(initialEnabled);
+    }, [initialEnabled]);
+
+    useEffect(() => {
+        setVolumeState(initialVolume);
+    }, [initialVolume]);
+
+    // Interní funkce pro změnu stavu + notifikace rodiče
+    const updateState = (en: boolean, vol: number) => {
+        setSoundEnabledState(en);
+        setVolumeState(vol);
+        if (onSettingsChange) {
+            onSettingsChange(en, vol);
+        }
+    };
+
+    const setSoundEnabled = (val: boolean) => updateState(val, volume);
+    const setVolume = (val: number) => updateState(soundEnabled, val);
+
+    // Generátor tónů
     const playTone = useCallback((freq: number, type: OscillatorType, duration: number, specificVol: number = 0.1) => {
         const ctx = ctxRef.current;
         if (!ctx || !soundEnabled) return;
@@ -64,16 +77,14 @@ export const SoundProvider: React.FC<{
         const osc = ctx.createOscillator();
         const gainNode = ctx.createGain();
 
-        // Master Volume aplikace * Hlasitost konkrétního efektu
         const finalVolume = volume * specificVol;
 
         osc.type = type;
         osc.frequency.setValueAtTime(freq, ctx.currentTime);
 
-        // Obálka (ADSR - Attack, Decay, Sustain, Release zjednodušeně)
         gainNode.gain.setValueAtTime(0, ctx.currentTime);
-        gainNode.gain.linearRampToValueAtTime(finalVolume, ctx.currentTime + 0.01); // Attack
-        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration); // Release
+        gainNode.gain.linearRampToValueAtTime(finalVolume, ctx.currentTime + 0.01);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
 
         osc.connect(gainNode);
         gainNode.connect(ctx.destination);
@@ -82,7 +93,7 @@ export const SoundProvider: React.FC<{
         osc.stop(ctx.currentTime + duration);
     }, [soundEnabled, volume]);
 
-    // --- DEFINICE EFEKTŮ ---
+    // Veřejná funkce play()
     const play = useCallback((type: SoundType) => {
         if (!soundEnabled) return;
 
@@ -95,9 +106,9 @@ export const SoundProvider: React.FC<{
                 playTone(400, 'triangle', 0.05, 0.05);
                 break;
             case 'success':
-                playTone(523.25, 'sine', 0.1, 0.2); // C5
-                setTimeout(() => playTone(659.25, 'sine', 0.1, 0.2), 80); // E5
-                setTimeout(() => playTone(783.99, 'square', 0.3, 0.1), 160); // G5
+                playTone(523.25, 'sine', 0.1, 0.2);
+                setTimeout(() => playTone(659.25, 'sine', 0.1, 0.2), 80);
+                setTimeout(() => playTone(783.99, 'square', 0.3, 0.1), 160);
                 break;
             case 'error':
                 playTone(150, 'sawtooth', 0.2, 0.3);
@@ -118,7 +129,8 @@ export const SoundProvider: React.FC<{
             case 'glitch':
                 playTone(Math.random() * 500 + 100, 'sawtooth', 0.1, 0.1);
                 break;
-            default:
+            case 'typing':
+                playTone(800, 'sine', 0.03, 0.05);
                 break;
         }
     }, [soundEnabled, playTone]);
@@ -130,7 +142,8 @@ export const SoundProvider: React.FC<{
     );
 };
 
-// Hook pro použití v komponentách
+// 4. Hook (exportovaný přímo odtud, aby to bylo jednoduché)
+// eslint-disable-next-line react-refresh/only-export-components
 export const useSound = () => {
     const context = useContext(SoundContext);
     if (!context) {

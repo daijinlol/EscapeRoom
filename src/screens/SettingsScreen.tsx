@@ -16,7 +16,6 @@ interface SettingsScreenProps {
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpdateSettings, onBack }) => {
     const { t, i18n } = useTranslation();
-    // Zde načteme settery z našeho SoundContextu
     const { play, setVolume, setSoundEnabled } = useSound();
 
     const changeLanguage = (lang: 'cs' | 'en') => {
@@ -30,22 +29,27 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpda
         const newState = !settings.soundEnabled;
         play(newState ? 'toggle_on' : 'toggle_off');
 
-        // DŮLEŽITÉ: Voláme setter z kontextu, aby se změna projevila v AudioEngine
+        // 1. Aktualizace Audio Enginu
         setSoundEnabled(newState);
-
-        // Poznámka: onUpdateSettings() zde volat nemusíme, protože SoundContext
-        // zavolá callback onSettingsChange v App.tsx, který aktualizuje hlavní settings.
+        // 2. Uložení do nastavení hry
+        onUpdateSettings({ soundEnabled: newState });
     };
 
     // Handler pro změnu hlasitosti
     const handleVolumeChange = (vol: number) => {
-        // DŮLEŽITÉ: Okamžitá změna hlasitosti v AudioEngine
+        // 1. Okamžitá změna hlasitosti v AudioEngine
         setVolume(vol);
+
+        const newSettings: Partial<GameSettings> = { volume: vol };
 
         // Pokud uživatel hýbe sliderem a má vypnutý zvuk, automaticky ho zapneme
         if (vol > 0 && !settings.soundEnabled) {
             setSoundEnabled(true);
+            newSettings.soundEnabled = true;
         }
+
+        // 2. Uložení do nastavení hry
+        onUpdateSettings(newSettings);
     };
 
     return (
@@ -77,7 +81,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpda
                     </div>
                 </section>
 
-                {/* Obtížnost - ZŠ */}
+                {/* Obtížnost */}
                 <section>
                     <h3 className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-3 flex items-center gap-2">
                         <ShieldAlert size={14} /> {t('difficulty')}
@@ -100,7 +104,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpda
                         </div>
                     </div>
 
-                    {/* Obtížnost - SŠ */}
                     <div>
                         <p className="text-cyan-400/70 text-[10px] font-bold mb-3 uppercase tracking-wider border-b border-cyan-900/30 pb-1">
                             {t('section_secondary')}
@@ -130,19 +133,16 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpda
                         active={settings.allowHints}
                         onToggle={() => {
                             play('click');
-                            // Nápovědy nejsou součástí SoundContextu, takže aktualizujeme přímo settings
                             onUpdateSettings({ allowHints: !settings.allowHints });
                         }}
                     />
 
-                    {/* Sound Toggle */}
                     <Toggle
                         label={t('sound')}
                         active={settings.soundEnabled}
                         onToggle={handleToggleSound}
                     />
 
-                    {/* Volume Slider */}
                     <div className={`mt-2 px-2 border-l-2 border-slate-800 transition-all duration-300 ${settings.soundEnabled ? 'opacity-100 translate-x-0' : 'opacity-40 pointer-events-none -translate-x-2'}`}>
                         <div className="flex items-center gap-2 mb-1 text-xs text-slate-400 font-mono uppercase tracking-wider">
                             <Volume2 size={12} /> Master Volume
@@ -156,7 +156,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpda
 
             </div>
 
-            {/* Back Button */}
             <div className="fixed bottom-6 left-0 right-0 px-6 max-w-md mx-auto pointer-events-none">
                 <div className="pointer-events-auto">
                     <CyberButton variant="secondary" onClick={onBack}>

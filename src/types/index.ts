@@ -26,17 +26,20 @@ export interface GameSettings {
     volume: number;
 }
 
-// Struktura pro Level v menu
 export interface LevelInfo {
     id: string;
     labelKey: string;
     phase: GamePhase;
 }
 
-// --- NOVÉ: Definice Logu (přesunuto z komponenty sem) ---
 export interface LogEntry {
     id: string;
     text: string;
     type: 'info' | 'error' | 'success' | 'system';
     timestamp: string;
 }
+
+// --- ZVUKY (Přesunuto sem pro globální dostupnost) ---
+export type SoundType =
+    | 'click' | 'hover' | 'success' | 'error'
+    | 'typing' | 'glitch' | 'menu_open' | 'toggle_on' | 'toggle_off';

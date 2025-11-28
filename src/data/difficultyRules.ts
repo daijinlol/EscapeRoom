@@ -13,6 +13,20 @@ export type PuzzleType =
     | 'sql_basic'          // SŠ: SQL Injection
     | 'placeholder';       // Pro zatím neexistující
 
+// Mapování PuzzleType -> Locale Key (pro dynamické menu)
+export const PUZZLE_LABELS: Record<PuzzleType, string> = {
+    'binary_basic': 'puzzletype_binary_basic',
+    'binary_advanced': 'puzzletype_binary_advanced',
+    'cipher_caesar': 'puzzletype_cipher_caesar',
+    'network_path': 'puzzletype_network_path',
+    'logic_gates_basic': 'puzzletype_logic_gates_basic',
+    'logic_gates_adv': 'puzzletype_logic_gates_adv',
+    'coding_blocks': 'puzzletype_coding_blocks',
+    'coding_js': 'puzzletype_coding_js',
+    'sql_basic': 'puzzletype_sql_basic',
+    'placeholder': 'puzzletype_placeholder'
+};
+
 // Konfigurace Levelu
 export interface LevelConfig {
     storyKey: string;
@@ -21,34 +35,43 @@ export interface LevelConfig {
     puzzles: Record<GamePhase, PuzzleType>;
 }
 
+// Defaultní nastavení, aby TypeScript nekřičel, že něco chybí
 const DEFAULT_PUZZLES: Record<GamePhase, PuzzleType> = {
-    puzzle1: 'placeholder', puzzle2: 'placeholder', puzzle3: 'placeholder',
-    puzzle4: 'placeholder', pathSelection: 'placeholder',
-    puzzle5_logic: 'placeholder', puzzle6_logic: 'placeholder', puzzle7_logic: 'placeholder',
-    puzzle5_data: 'placeholder', puzzle6_data: 'placeholder', puzzle7_data: 'placeholder',
-    outro: 'placeholder', gameOver: 'placeholder'
+    puzzle1: 'placeholder',
+    puzzle2: 'placeholder',
+    puzzle3: 'placeholder',
+    puzzle4: 'placeholder',
+    pathSelection: 'placeholder',
+    puzzle5_logic: 'placeholder',
+    puzzle6_logic: 'placeholder',
+    puzzle7_logic: 'placeholder',
+    puzzle5_data: 'placeholder',
+    puzzle6_data: 'placeholder',
+    puzzle7_data: 'placeholder',
+    outro: 'placeholder',
+    gameOver: 'placeholder'
 };
 
 export const DIFFICULTY_RULES: Record<Difficulty, LevelConfig> = {
-    // --- ZŠ 6 ---
+    // --- 6. TŘÍDA ---
     'zs_6': {
         storyKey: 'story_zs_6', // Junior Detective
         themeColor: '#4ade80', // green-400
         puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'cipher_caesar', puzzle2: 'network_path' }
     },
-    // --- ZŠ 7 ---
+    // --- 7. TŘÍDA ---
     'zs_7': {
         storyKey: 'story_zs_7', // Explorer
         themeColor: '#4ade80',
         puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'cipher_caesar' }
     },
-    // --- ZŠ 8 ---
+    // --- 8. TŘÍDA ---
     'zs_8': {
         storyKey: 'story_zs_8', // Admin (Binary)
         themeColor: '#fbbf24', // amber-400
         puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'binary_basic', puzzle2: 'coding_blocks' }
     },
-    // --- ZŠ 9 ---
+    // --- 9. TŘÍDA ---
     'zs_9': {
         storyKey: 'story_zs_9', // Architect
         themeColor: '#fbbf24',
