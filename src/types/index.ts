@@ -1,23 +1,36 @@
 export type Language = 'cs' | 'en';
 
-// ZMĚNA: 8 úrovní obtížnosti podle ročníků
+// Definice obtížností
 export type Difficulty =
-// 2. stupeň ZŠ
-    | 'zs_6' // 6. třída
-    | 'zs_7' // 7. třída
-    | 'zs_8' // 8. třída (Nová informatika - Datové typy)
-    | 'zs_9' // 9. třída
-    // Střední škola (Gymnázium/SOŠ)
-    | 'ss_1' // 1. ročník
-    | 'ss_2' // 2. ročník
-    | 'ss_3' // 3. ročník
-    | 'ss_4'; // 4. ročník (Maturitní)
+    | 'zs_6' | 'zs_7' | 'zs_8' | 'zs_9'
+    | 'ss_1' | 'ss_2' | 'ss_3' | 'ss_4';
 
-export type ScreenState = 'menu' | 'game' | 'settings' | 'credits';
+// Seznam obrazovek
+export type ScreenState = 'menu' | 'intro' | 'game' | 'settings' | 'credits';
+
+// Definice stavů pro konkrétní hádanky
+export type GamePhase =
+    | 'puzzle1'
+    | 'puzzle2'
+    | 'puzzle3'
+    | 'puzzle4'
+    | 'pathSelection'
+    | 'puzzle5_logic' | 'puzzle5_data'
+    | 'puzzle6_logic' | 'puzzle6_data'
+    | 'puzzle7_logic' | 'puzzle7_data'
+    | 'outro'
+    | 'gameOver'; // <--- PŘIDÁNO
 
 export interface GameSettings {
     language: Language;
     difficulty: Difficulty;
     allowHints: boolean;
     soundEnabled: boolean;
+}
+
+// Struktura pro Level v menu
+export interface LevelInfo {
+    id: string;
+    labelKey: string;
+    phase: GamePhase;
 }
