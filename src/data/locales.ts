@@ -1,4 +1,3 @@
-// Definice překladů (Resources)
 export const resources = {
     cs: {
         translation: {
@@ -48,46 +47,86 @@ export const resources = {
             intro_log_3: "> Establishing user link...",
             intro_btn_start: "[ ZAHÁJIT KALIBRACI ]",
 
-            // --- PŘÍBĚH: VARIANTA JUNIOR (ZŠ) ---
-            intro_story_junior: `[ SYSTÉM: UPOZORNĚNÍ ]
-[ STAV: POTŘEBUJI POMOC ]
+            // --- UNIKÁTNÍ PŘÍBĚHY PRO KAŽDOU ÚROVEŇ ---
 
-Ahoj! Jsem AURA, školní umělá inteligence.
-Někdo mi v noci zpřeházel data a teď si nemůžu vzpomenout, jak fungují moje obvody.
+            // 6. Třída - Detektiv
+            story_zs_6: `[ AHOJ DETEKTIVE! ]
+Někdo nám v počítači schoval důležité obrázky a zprávy. 
+Jsem AURA, tvůj digitální pomocník, ale sama na to nestačím.
 
-Jsi tu jen ty. Věřím, že jsi dost chytrý na to, abys mi pomohl.
-Máme 60 minut, než zazvoní na hodinu a já musím být připravená.
+Musíme jít po digitálních stopách a najít správnou cestu.
+Neboj, bude to jako hledání pokladu. Jsi připraven?`,
 
-Pomůžeš mi to opravit?`,
+            // 7. Třída - Průzkumník
+            story_zs_7: `[ VOLÁM PRŮZKUMNÍKA ]
+Vítej v systému AURA. Mám tu pořádný nepořádek v datech.
+Někdo nám zpřeházel kabely a informace nedochází tam, kam mají.
 
-            // --- PŘÍBĚH: VARIANTA SENIOR (SŠ) ---
-            intro_story_senior: `[ SYSTEM DETECTED: CRITICAL KERNEL PANIC ]
-[ INTEGRITY CHECK: FAILED ]
-[ INITIALIZING SANDBOX PROTOCOL... ]
+Potřebuji někoho, kdo se umí orientovat a logicky myslet.
+Máš 60 minut na to, abychom to spolu dali do pořádku.`,
 
-Zdravím, Operátore.
+            // 8. Třída - Admin Junior (Nová informatika)
+            story_zs_8: `[ SYSTEM ALERT: DATA CORRUPTION ]
+Ahoj! Jsem AURA, školní AI.
+Někdo mi v noci naboural binární paměť. Vidím jen nuly a jedničky a nedává mi to smysl.
 
-Jsem AURA. Mé paměťové sektory jsou fragmentované v důsledku externího kybernetického útoku.
-Infrastruktura je nestabilní.
+Ty se učíš kódovat data, že? Potřebuji, abys mi pomohl přeložit ty binární kódy zpátky na čísla.
+Bez tebe se restart nepovede.`,
 
-Jsi má jediná šance na záchranu před kompletním zhroucením systému.
-Máme 60 minut do nevratné ztráty dat.
+            // 9. Třída - Systémový Architekt
+            story_zs_9: `[ KRITICKÁ CHYBA SÍTĚ ]
+Zdravím. Zde jádro AURA.
+Detekuji anomálie v síťové komunikaci a logických obvodech.
 
-Jsi připraven převzít root přístup?`,
+Vypadá to na složitější problém, který vyžaduje znalost algoritmů.
+Jsi nejzkušenější z "deváťáků". Převezmi kontrolu nad terminálem.`,
 
-            // --- GAME SCREEN (HUD & LOGY) ---
+            // SŠ 1 - Hacker (Číselné soustavy)
+            story_ss_1: `[ KERNEL PANIC: HEX DUMP REQUIRED ]
+Vítej v nízkoúrovňovém rozhraní.
+Jsem AURA. Můj procesor nezvládá interpretovat instrukce.
+
+Útočník zakódoval přístupové klíče do Hexadecimální a Binární soustavy.
+Pro běžného uživatele je to šum. Pro tebe je to jazyk.
+Dekóduj to.`,
+
+            // SŠ 2 - Síťař (Sítě & Java/Python)
+            story_ss_2: `[ CONNECTION LOST: TCP/IP FAILURE ]
+Ping... Request timed out.
+AURA nemůže navázat spojení se serverem.
+
+Pakety se ztrácí. Směrovací tabulky jsou prázdné.
+Potřebuji síťového inženýra, který rozumí protokolům a nebojí se sáhnout do kódu.
+Jsi na řadě.`,
+
+            // SŠ 3 - DB Admin (SQL & Logika)
+            story_ss_3: `[ SQL INJECTION DETECTED ]
+Varování! Databáze byla narušena.
+Někdo smazal tabulku USERS a zamkl systém logickými hradly.
+
+Jsem AURA a mým úkolem je chránit data. Ale teď jsem slepá.
+Potřebuji tvé znalosti SQL a booleovské logiky k obnově přístupu.`,
+
+            // SŠ 4 - Expert (Komplexní)
+            story_ss_4: `[ SYSTEM BREACH: LEVEL 5 ]
+[ ENCRYPTION: POLYMORPHIC ]
+
+Zdravím, Experte.
+Tohle není cvičení. Útok cílil na samotné jádro AI a rekurzivní smyčky.
+Pokud selžeme, systém se zhroutí do singularity.
+
+Máš 60 minut. Využij vše, co ses za 4 roky naučil.
+Hodně štěstí.`,
+
+
+            // --- GAME SCREEN ---
             game_start_msg: "Simulace spuštěna...",
-            welcome_user: "Vítejte, uživateli.",
             game_current_module: "Aktuální modul",
             game_system_unstable: "SYSTÉM NESTABILNÍ",
-            game_puzzle_container: "[ KONTEJNER HÁDANKY ]",
-            game_waiting_for_data: "Čekám na data...",
-            game_test_log_btn: "TEST LOG",
-            game_test_log_msg: "Testovací log zpráva...",
             game_menu_title: "HERNÍ MENU",
-            game_menu_resume: "POKRAČOVAT V DIAGNOSTICE",
-            game_menu_levels: "SEZNAM MODULŮ",
-            game_menu_exit: "UKONČIT DO HLAVNÍHO MENU",
+            game_menu_resume: "POKRAČOVAT",
+            game_menu_levels: "MODULY",
+            game_menu_exit: "UKONČIT",
             game_level_locked: "ZAMČENO",
             game_level_completed: "HOTOVO",
             game_level_current: "AKTIVNÍ",
@@ -95,17 +134,17 @@ Jsi připraven převzít root přístup?`,
             game_log_init: "Diagnostická sekvence zahájena.",
             game_log_connected: "Spojení navázáno. Uživatel ověřen.",
             game_module_binary: "01_BINÁRNÍ_DEKODÉR",
+            game_module_dom: "02_DOM_INSPEKTOR",
+            game_module_logic: "03_LOGICKÁ_HRADLA",
+            game_module_sql: "04_SQL_KONZOLE",
+            game_module_path: "05_ROZCESTNÍK",
 
-            // --- CREDITS ---
+            // --- CREDITS & VALIDATION ---
             credits_author_label: "Autor",
             credits_author_name: "Jan Novák",
             credits_type_label: "Typ projektu",
             credits_type_value: "Diplomová práce",
             credits_version_label: "Verze",
-
-            // --- VALIDACE ---
-            validation_required: "Toto pole je povinné",
-            validation_email: "Neplatný formát emailu",
         }
     },
     en: {
@@ -128,20 +167,20 @@ Jsi připraven převzít root přístup?`,
             section_secondary: "Secondary Education (High School)",
 
             // --- DIFFICULTIES: NAMES ---
-            diff_zs_6: "GRADE 6",
-            diff_zs_7: "GRADE 7",
-            diff_zs_8: "GRADE 8",
-            diff_zs_9: "GRADE 9",
-            diff_ss_1: "1st YEAR (HS)",
-            diff_ss_2: "2nd YEAR (HS)",
-            diff_ss_3: "3rd YEAR (HS)",
-            diff_ss_4: "4th YEAR (GRADUATION)",
+            diff_zs_6: "6TH GRADE",
+            diff_zs_7: "7TH GRADE",
+            diff_zs_8: "8TH GRADE",
+            diff_zs_9: "9TH GRADE",
+            diff_ss_1: "1ST YEAR (HS)",
+            diff_ss_2: "2ND YEAR (HS)",
+            diff_ss_3: "3RD YEAR (HS)",
+            diff_ss_4: "4TH YEAR (GRADUATION)",
 
             // --- DIFFICULTIES: DESCRIPTIONS ---
             diff_desc_zs_6: "Digital footprint, safety basics, simple ciphers.",
             diff_desc_zs_7: "Block programming, information retrieval, hardware.",
-            diff_desc_zs_8: "Binary code, data encoding, variables.",
-            diff_desc_zs_9: "Modeling, networks, algorithms, systems.",
+            diff_desc_zs_8: "New Informatics: Binary code, data encoding, variables.",
+            diff_desc_zs_9: "Modeling, networks, advanced algorithms, systems.",
             diff_desc_ss_1: "Number systems (Hex), data representation, PC architecture.",
             diff_desc_ss_2: "Networks (TCP/IP), algorithms (Python/Java), web tech.",
             diff_desc_ss_3: "Databases (SQL), logic circuits, cybersecurity.",
@@ -156,66 +195,103 @@ Jsi připraven převzít root přístup?`,
             intro_log_3: "> Establishing user link...",
             intro_btn_start: "[ INITIATE CALIBRATION ]",
 
-            // --- STORY: JUNIOR (Primary) ---
-            intro_story_junior: `[ SYSTEM: WARNING ]
-[ STATUS: HELP REQUIRED ]
+            // --- UNIQUE STORIES FOR EACH LEVEL ---
 
+            // 6th Grade - Detective
+            story_zs_6: `[ HELLO DETECTIVE! ]
+Someone hid important images and messages in our computer.
+I am AURA, your digital assistant, but I can't do it alone.
+
+We need to follow digital traces and find the right path.
+Don't worry, it's like a treasure hunt. Are you ready?`,
+
+            // 7th Grade - Explorer
+            story_zs_7: `[ CALLING EXPLORER ]
+Welcome to the AURA system. I have a huge data mess here.
+Someone mixed up our cables and information isn't reaching its destination.
+
+I need someone who can navigate and think logically.
+You have 60 minutes to fix this together.`,
+
+            // 8th Grade - Admin Junior
+            story_zs_8: `[ SYSTEM ALERT: DATA CORRUPTION ]
 Hello! I am AURA, the school AI.
-Someone messed up my data last night, and now I can't remember how my circuits work.
+Someone hacked my binary memory last night. I only see zeros and ones and it makes no sense.
 
-You are the only one here. I believe you are smart enough to help me.
-We have 60 minutes before the bell rings.
+You are learning to code data, right? I need you to help me translate those binary codes back into numbers.
+The restart won't work without you.`,
 
-Will you help me fix this?`,
+            // 9th Grade - System Architect
+            story_zs_9: `[ CRITICAL NETWORK ERROR ]
+Greetings. AURA core here.
+I am detecting anomalies in network communication and logic circuits.
 
-            // --- STORY: SENIOR (Secondary) ---
-            intro_story_senior: `[ SYSTEM DETECTED: CRITICAL KERNEL PANIC ]
-[ INTEGRITY CHECK: FAILED ]
-[ INITIALIZING SANDBOX PROTOCOL... ]
+It looks like a complex problem requiring knowledge of algorithms.
+You are the most experienced of the "ninth graders". Take control of the terminal.`,
 
-Greetings, Operator.
+            // HS 1 - Hacker
+            story_ss_1: `[ KERNEL PANIC: HEX DUMP REQUIRED ]
+Welcome to the low-level interface.
+I am AURA. My processor fails to interpret instructions.
 
-I am AURA. My memory sectors are fragmented due to an external cyber attack.
-Infrastructure is unstable.
+The attacker encoded access keys into Hexadecimal and Binary systems.
+To a common user, it's noise. To you, it's a language.
+Decode it.`,
 
-You are my only chance for salvation before total system collapse.
-We have 60 minutes until irreversible data loss.
+            // HS 2 - Network Engineer
+            story_ss_2: `[ CONNECTION LOST: TCP/IP FAILURE ]
+Ping... Request timed out.
+AURA cannot establish a connection to the server.
 
-Are you ready to take root access?`,
+Packets are being lost. Routing tables are empty.
+I need a network engineer who understands protocols and isn't afraid to touch the code.
+You're up.`,
+
+            // HS 3 - DB Admin
+            story_ss_3: `[ SQL INJECTION DETECTED ]
+Warning! Database compromised.
+Someone deleted the USERS table and locked the system with logic gates.
+
+I am AURA and my task is to protect data. But now I am blind.
+I need your SQL and Boolean logic knowledge to restore access.`,
+
+            // HS 4 - Expert
+            story_ss_4: `[ SYSTEM BREACH: LEVEL 5 ]
+[ ENCRYPTION: POLYMORPHIC ]
+
+Greetings, Expert.
+This is not a drill. The attack targeted the AI core itself and recursive loops.
+If we fail, the system collapses into a singularity.
+
+You have 60 minutes. Use everything you've learned in 4 years.
+Good luck.`,
 
             // --- GAME SCREEN ---
             game_start_msg: "Simulation started...",
-            welcome_user: "Welcome, User.",
             game_current_module: "Current Module",
             game_system_unstable: "SYSTEM UNSTABLE",
-            game_puzzle_container: "[ PUZZLE CONTAINER ]",
-            game_waiting_for_data: "Waiting for data...",
-            game_test_log_btn: "TEST LOG",
-            game_test_log_msg: "Test log message...",
-
-            game_log_init: "Diagnostic sequence initialized.",
-            game_log_connected: "Connection established. User verified.",
-            game_module_binary: "01_BINARY_DECODER",
             game_menu_title: "GAME MENU",
-            game_menu_resume: "RESUME DIAGNOSTICS",
-            game_menu_levels: "MODULE LIST",
-            game_menu_exit: "EXIT TO MAIN MENU",
+            game_menu_resume: "RESUME",
+            game_menu_levels: "MODULES",
+            game_menu_exit: "EXIT",
             game_level_locked: "LOCKED",
             game_level_completed: "COMPLETED",
             game_level_current: "ACTIVE",
 
+            game_log_init: "Diagnostic sequence initialized.",
+            game_log_connected: "Connection established. User verified.",
+            game_module_binary: "01_BINARY_DECODER",
+            game_module_dom: "02_DOM_INSPECTOR",
+            game_module_logic: "03_LOGIC_GATES",
+            game_module_sql: "04_SQL_CONSOLE",
+            game_module_path: "05_ROUTER",
 
-
-            // --- CREDITS ---
+            // --- CREDITS & VALIDATION ---
             credits_author_label: "Author",
             credits_author_name: "Jan Novák",
             credits_type_label: "Project Type",
             credits_type_value: "Diploma Thesis",
             credits_version_label: "Version",
-
-            // --- VALIDATION ---
-            validation_required: "This field is required",
-            validation_email: "Invalid email format",
         }
     }
 };

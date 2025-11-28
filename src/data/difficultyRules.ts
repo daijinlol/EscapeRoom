@@ -1,60 +1,86 @@
-import { type Difficulty } from '../types';
+import { type Difficulty, type GamePhase } from '../types';
 
-// Definice toho, co všechno se mění podle obtížnosti
+// Definice typů hádanek (klíče do registru)
+export type PuzzleType =
+    | 'binary_basic'       // ZŠ: 5 bitů, čísla
+    | 'binary_advanced'    // SŠ: 8 bitů, ASCII
+    | 'cipher_caesar'      // ZŠ: Jednoduchá šifra
+    | 'logic_gates_basic'  // ZŠ: Jednoduchá hradla
+    | 'logic_gates_adv'    // SŠ: Složité obvody
+    | 'coding_blocks'      // ZŠ: Blokové programování
+    | 'coding_js'          // SŠ: Oprava JS kódu
+    | 'network_path'       // Spojování kabelů
+    | 'sql_basic'          // SŠ: SQL Injection
+    | 'placeholder';       // Pro zatím neexistující
+
+// Konfigurace Levelu
 export interface LevelConfig {
-    storyKey: string;      // Klíč pro překlad příběhu v Intru
-    themeColor: string;    // Hlavní barva (pro CSS/Tailwind třídy nebo styly)
-    puzzleSet: 'basic' | 'advanced'; // Jakou sadu hádanek použít (pro budoucí logiku)
+    storyKey: string;
+    themeColor: string;
+    // Mapování fází hry na konkrétní typy hádanek
+    puzzles: Record<GamePhase, PuzzleType>;
 }
 
-// Konfigurace pro každou obtížnost
+const DEFAULT_PUZZLES: Record<GamePhase, PuzzleType> = {
+    puzzle1: 'placeholder', puzzle2: 'placeholder', puzzle3: 'placeholder',
+    puzzle4: 'placeholder', pathSelection: 'placeholder',
+    puzzle5_logic: 'placeholder', puzzle6_logic: 'placeholder', puzzle7_logic: 'placeholder',
+    puzzle5_data: 'placeholder', puzzle6_data: 'placeholder', puzzle7_data: 'placeholder',
+    outro: 'placeholder', gameOver: 'placeholder'
+};
+
 export const DIFFICULTY_RULES: Record<Difficulty, LevelConfig> = {
-    // --- ZŠ (Zelená/Oranžová tématika, jednodušší příběh) ---
+    // --- ZŠ 6 ---
     'zs_6': {
-        storyKey: 'intro_story_junior',
+        storyKey: 'story_zs_6', // Junior Detective
         themeColor: '#4ade80', // green-400
-        puzzleSet: 'basic',
+        puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'cipher_caesar', puzzle2: 'network_path' }
     },
+    // --- ZŠ 7 ---
     'zs_7': {
-        storyKey: 'intro_story_junior',
+        storyKey: 'story_zs_7', // Explorer
         themeColor: '#4ade80',
-        puzzleSet: 'basic',
+        puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'cipher_caesar' }
     },
+    // --- ZŠ 8 ---
     'zs_8': {
-        storyKey: 'intro_story_junior', // Zde už bychom mohli dát 'intro_story_med'
+        storyKey: 'story_zs_8', // Admin (Binary)
         themeColor: '#fbbf24', // amber-400
-        puzzleSet: 'basic',
+        puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'binary_basic', puzzle2: 'coding_blocks' }
     },
+    // --- ZŠ 9 ---
     'zs_9': {
-        storyKey: 'intro_story_senior', // Deváťáci už snesou "dospělejší" příběh
+        storyKey: 'story_zs_9', // Architect
         themeColor: '#fbbf24',
-        puzzleSet: 'advanced', // Už mohou mít těžší hádanky
+        puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'binary_basic' }
     },
 
-    // --- SŠ (Modrá/Fialová tématika, technický příběh) ---
+    // --- SŠ 1 ---
     'ss_1': {
-        storyKey: 'intro_story_senior',
-        themeColor: '#60a5fa', // blue-400
-        puzzleSet: 'advanced',
+        storyKey: 'story_ss_1', // Hacker
+        themeColor: '#22d3ee', // cyan-400
+        puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'binary_advanced', puzzle2: 'logic_gates_adv' }
     },
+    // --- SŠ 2 ---
     'ss_2': {
-        storyKey: 'intro_story_senior',
-        themeColor: '#22d3ee', // cyan-400 (Naše výchozí)
-        puzzleSet: 'advanced',
+        storyKey: 'story_ss_2', // Network
+        themeColor: '#22d3ee',
+        puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'binary_advanced' }
     },
+    // --- SŠ 3 ---
     'ss_3': {
-        storyKey: 'intro_story_senior',
+        storyKey: 'story_ss_3', // Database
         themeColor: '#a78bfa', // violet-400
-        puzzleSet: 'advanced',
+        puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'binary_advanced', puzzle4: 'sql_basic' }
     },
+    // --- SŠ 4 ---
     'ss_4': {
-        storyKey: 'intro_story_senior',
-        themeColor: '#f472b6', // pink-400 (Expert/Hardcore)
-        puzzleSet: 'advanced',
+        storyKey: 'story_ss_4', // Expert
+        themeColor: '#f472b6', // pink-400
+        puzzles: { ...DEFAULT_PUZZLES, puzzle1: 'binary_advanced', puzzle4: 'sql_basic' }
     },
 };
 
-// Pomocná funkce pro získání konfigurace
 export const getLevelConfig = (difficulty: Difficulty): LevelConfig => {
     return DIFFICULTY_RULES[difficulty];
 };

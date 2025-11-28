@@ -1,9 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Globe, ShieldAlert, Settings as SettingsIcon } from 'lucide-react';
+import { Globe, ShieldAlert, Settings as SettingsIcon, Volume2 } from 'lucide-react';
 import { CyberButton } from '../components/ui/CyberButton';
 import { SelectionCard } from '../components/ui/SelectionCard';
 import { Toggle } from '../components/ui/Toggle';
+import { VolumeSlider } from '../components/ui/VolumeSlider';
+import { useSound } from '../hooks/useSound';
 import type { GameSettings, Difficulty } from '../types';
 
 interface SettingsScreenProps {
@@ -14,10 +16,36 @@ interface SettingsScreenProps {
 
 export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpdateSettings, onBack }) => {
     const { t, i18n } = useTranslation();
+    // Zde načteme settery z našeho SoundContextu
+    const { play, setVolume, setSoundEnabled } = useSound();
 
     const changeLanguage = (lang: 'cs' | 'en') => {
+        play('click');
         i18n.changeLanguage(lang);
         onUpdateSettings({ language: lang });
+    };
+
+    // Handler pro přepnutí zvuku
+    const handleToggleSound = () => {
+        const newState = !settings.soundEnabled;
+        play(newState ? 'toggle_on' : 'toggle_off');
+
+        // DŮLEŽITÉ: Voláme setter z kontextu, aby se změna projevila v AudioEngine
+        setSoundEnabled(newState);
+
+        // Poznámka: onUpdateSettings() zde volat nemusíme, protože SoundContext
+        // zavolá callback onSettingsChange v App.tsx, který aktualizuje hlavní settings.
+    };
+
+    // Handler pro změnu hlasitosti
+    const handleVolumeChange = (vol: number) => {
+        // DŮLEŽITÉ: Okamžitá změna hlasitosti v AudioEngine
+        setVolume(vol);
+
+        // Pokud uživatel hýbe sliderem a má vypnutý zvuk, automaticky ho zapneme
+        if (vol > 0 && !settings.soundEnabled) {
+            setSoundEnabled(true);
+        }
     };
 
     return (
@@ -59,7 +87,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpda
                         <p className="text-cyan-400/70 text-[10px] font-bold mb-3 uppercase tracking-wider border-b border-cyan-900/30 pb-1">
                             {t('section_primary')}
                         </p>
-                        {/* Grid 2 sloupce pro ZŠ */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {(['zs_6', 'zs_7', 'zs_8', 'zs_9'] as Difficulty[]).map((diff) => (
                                 <SelectionCard
@@ -78,7 +105,6 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpda
                         <p className="text-cyan-400/70 text-[10px] font-bold mb-3 uppercase tracking-wider border-b border-cyan-900/30 pb-1">
                             {t('section_secondary')}
                         </p>
-                        {/* Grid 2 sloupce pro SŠ */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             {(['ss_1', 'ss_2', 'ss_3', 'ss_4'] as Difficulty[]).map((diff) => (
                                 <SelectionCard
@@ -93,21 +119,39 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = ({ settings, onUpda
                     </div>
                 </section>
 
-                {/* Přepínače */}
+                {/* Nastavení a Zvuk */}
                 <section>
                     <h3 className="text-xs uppercase tracking-widest text-slate-500 font-bold mb-2 flex items-center gap-2">
                         <SettingsIcon size={14} /> {t('options')}
                     </h3>
+
                     <Toggle
                         label={t('allow_hints')}
                         active={settings.allowHints}
-                        onToggle={() => onUpdateSettings({ allowHints: !settings.allowHints })}
+                        onToggle={() => {
+                            play('click');
+                            // Nápovědy nejsou součástí SoundContextu, takže aktualizujeme přímo settings
+                            onUpdateSettings({ allowHints: !settings.allowHints });
+                        }}
                     />
+
+                    {/* Sound Toggle */}
                     <Toggle
                         label={t('sound')}
                         active={settings.soundEnabled}
-                        onToggle={() => onUpdateSettings({ soundEnabled: !settings.soundEnabled })}
+                        onToggle={handleToggleSound}
                     />
+
+                    {/* Volume Slider */}
+                    <div className={`mt-2 px-2 border-l-2 border-slate-800 transition-all duration-300 ${settings.soundEnabled ? 'opacity-100 translate-x-0' : 'opacity-40 pointer-events-none -translate-x-2'}`}>
+                        <div className="flex items-center gap-2 mb-1 text-xs text-slate-400 font-mono uppercase tracking-wider">
+                            <Volume2 size={12} /> Master Volume
+                        </div>
+                        <VolumeSlider
+                            value={settings.volume ?? 0.5}
+                            onChange={handleVolumeChange}
+                        />
+                    </div>
                 </section>
 
             </div>

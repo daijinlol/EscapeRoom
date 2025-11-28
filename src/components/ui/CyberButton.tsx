@@ -1,6 +1,6 @@
 import React from 'react';
-// ZMĚNA ZDE: Přidáno 'type' před LucideIcon
 import { ChevronRight, type LucideIcon } from 'lucide-react';
+import { useSound } from '../../hooks/useSound';
 
 interface CyberButtonProps {
     onClick: () => void;
@@ -17,6 +17,10 @@ export const CyberButton: React.FC<CyberButtonProps> = ({
                                                             variant = 'primary',
                                                             className = ''
                                                         }) => {
+
+    // Použití hooku z našeho nového kontextu
+    const { play } = useSound();
+
     const baseStyle = "relative group w-full px-6 py-4 mb-4 font-mono font-bold tracking-widest uppercase transition-all duration-200 border-2 clip-path-polygon cursor-pointer flex items-center justify-between";
 
     const variants = {
@@ -25,12 +29,25 @@ export const CyberButton: React.FC<CyberButtonProps> = ({
         danger: "bg-red-950/30 border-red-500 text-red-500 hover:bg-red-500 hover:text-black hover:shadow-[0_0_20px_rgba(239,68,68,0.6)]",
     };
 
+    const handleClick = () => {
+        play('click'); // Zvuk kliknutí
+        onClick();
+    };
+
+    const handleMouseEnter = () => {
+        play('hover'); // Zvuk při najetí myší
+    };
+
     return (
-        <button onClick={onClick} className={`${baseStyle} ${variants[variant]} ${className}`}>
-      <span className="flex items-center gap-3">
-        {Icon && <Icon size={20} />}
-          {children}
-      </span>
+        <button
+            onClick={handleClick}
+            onMouseEnter={handleMouseEnter}
+            className={`${baseStyle} ${variants[variant]} ${className}`}
+        >
+            <span className="flex items-center gap-3">
+                {Icon && <Icon size={20} />}
+                {children}
+            </span>
             <ChevronRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity transform group-hover:translate-x-1" />
         </button>
     );

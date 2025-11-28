@@ -1,14 +1,11 @@
 export type Language = 'cs' | 'en';
 
-// Definice obtížností
 export type Difficulty =
     | 'zs_6' | 'zs_7' | 'zs_8' | 'zs_9'
     | 'ss_1' | 'ss_2' | 'ss_3' | 'ss_4';
 
-// Seznam obrazovek
 export type ScreenState = 'menu' | 'intro' | 'game' | 'settings' | 'credits';
 
-// Definice stavů pro konkrétní hádanky
 export type GamePhase =
     | 'puzzle1'
     | 'puzzle2'
@@ -19,13 +16,14 @@ export type GamePhase =
     | 'puzzle6_logic' | 'puzzle6_data'
     | 'puzzle7_logic' | 'puzzle7_data'
     | 'outro'
-    | 'gameOver'; // <--- PŘIDÁNO
+    | 'gameOver';
 
 export interface GameSettings {
     language: Language;
     difficulty: Difficulty;
     allowHints: boolean;
     soundEnabled: boolean;
+    volume: number;
 }
 
 // Struktura pro Level v menu
@@ -33,4 +31,12 @@ export interface LevelInfo {
     id: string;
     labelKey: string;
     phase: GamePhase;
+}
+
+// --- NOVÉ: Definice Logu (přesunuto z komponenty sem) ---
+export interface LogEntry {
+    id: string;
+    text: string;
+    type: 'info' | 'error' | 'success' | 'system';
+    timestamp: string;
 }
